@@ -1,6 +1,6 @@
 {
   "name": "rxshell",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "shell functions wrapped with rxjs",
   "main": "index.js",
   "scripts": {
