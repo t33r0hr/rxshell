@@ -2,7 +2,7 @@
   "name": "rxshell",
   "version": "0.0.2",
   "description": "shell functions wrapped with rxjs",
-  "main": "index.js",
+  "main": "release/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "test:childProcess": "NODE_ENV=test ts-mocha ./src/process/ChildProcess.spec.ts",
@@ -15,7 +15,7 @@
     "lint": "tslint ./src/**/*.ts ./test/**/*.ts",
     "version": "npm run build:release",
     "postversion": "git push && git push --tags",
-    "prebuild": "rm -rf ./dist",
+    "prebuild": "rm -rf ./release",
     "build": "npm run build:ts",
     "build:release": "NODE_ENV=production npm run build",
     "build:package": "NODE_ENV=package npm run build",

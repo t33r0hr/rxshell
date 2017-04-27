@@ -18,7 +18,7 @@
     "allowSyntheticDefaultImports": true,
     "suppressExcessPropertyErrors": true,
     "suppressImplicitAnyIndexErrors": true,
-    "outDir": "dist",
+    "outDir": "release",
     "lib": ["es6"],
     "skipLibCheck": true
   },
