@@ -5,4 +5,6 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./ChildProcess.class"));
 __export(require("./exec"));
+__export(require("./fromReadable"));
+__export(require("./toWriteStream"));
 //# sourceMappingURL=index.js.map
