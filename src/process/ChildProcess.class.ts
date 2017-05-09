@@ -52,7 +52,11 @@ export class ChildProcess {
 
     const command = parseCommand(this.options.command)
     const cwd = this.options.cwd || process.cwd()
-    //console.log('spawn command:', command, cwd )
+    if ( /debug/.test(process.env.NODE_ENV||'') )
+    {
+      console.log('spawn command:', command, cwd )  
+    }
+    
     /*const child = cp.spawn(command.commandName,command.args,{
       cwd
     })*/

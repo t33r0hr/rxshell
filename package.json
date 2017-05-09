@@ -3,6 +3,7 @@
   "version": "0.0.4",
   "description": "shell functions wrapped with rxjs",
   "main": "release/index.js",
+  "typings": "release/index.d.ts",
   "scripts": {
     "test": "NODE_ENV=test ts-mocha ./src/**/*.spec.ts",
     "test:childProcess": "NODE_ENV=test ts-mocha ./src/process/ChildProcess.spec.ts",
@@ -18,6 +19,7 @@
     "prebuild": "rm -rf ./release",
     "build": "npm run build:ts",
     "build:release": "NODE_ENV=production npm run build",
+    "build:release:watch": "./scripts/watch.sh build:release",
     "build:package": "NODE_ENV=package npm run build",
     "build:ts": "tsc -p ./tsconfig.release.json",
     "package:minify": "uglifyjs release/index.js --source-map release/index.min.js.map --source-map-url release/index.js.map --compress --mangle --screw-ie8 --output release/index.min.js"
@@ -31,7 +33,8 @@
   "dependencies": {
     "@types/rx-node": "0.0.5",
     "rx-node": "^1.0.2",
-    "rxjs": "^5.3.0"
+    "rxjs": "^5.3.0",
+    "rxlogger": "git+ssh://git@dergoldenefoehn.de:/opt/git/rxlogger.git"
   },
   "devDependencies": {
     "@types/chai": "^3.5.1",

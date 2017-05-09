@@ -2,9 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const rxjs_1 = require("rxjs");
 const sep = new Buffer("\n");
+const toBuffer = (source) => {
+    if (source instanceof Buffer)
+        return source;
+    return new Buffer(source);
+};
 const join = (leftBuffer, rightBuffer) => {
-    const leftSize = (leftBuffer || '').length;
-    const rightSize = (rightBuffer || '').length;
+    leftBuffer = toBuffer(leftBuffer || '');
+    rightBuffer = toBuffer(rightBuffer || '');
+    const leftSize = leftBuffer.length;
+    const rightSize = rightBuffer.length;
     const out = new Buffer(leftSize + rightSize);
     leftSize && leftBuffer.copy(out);
     rightSize && rightBuffer.copy(out, leftSize);
