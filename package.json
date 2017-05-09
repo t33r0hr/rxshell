@@ -4,7 +4,7 @@
   "description": "shell functions wrapped with rxjs",
   "main": "release/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_ENV=test ts-mocha ./src/**/*.spec.ts",
     "test:childProcess": "NODE_ENV=test ts-mocha ./src/process/ChildProcess.spec.ts",
     "test:childProcess:watch": "./scripts/watch.sh test:childProcess",
     "postinstall": "npm run build",
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@dergoldenefoehn.de:/opt/git/rxshell.git"
+    "url": "git+https://github.com/afkmatze/rxshell.git"
   },
   "author": "Matthias Buchholz <mb@averagejoe.de>",
   "license": "MIT",
