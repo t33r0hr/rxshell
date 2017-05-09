@@ -3,9 +3,17 @@ import { Readable } from 'stream'
 
 const sep = new Buffer("\n")
 
-const join = ( leftBuffer:Buffer, rightBuffer:Buffer ):Buffer => {
-  const leftSize = (leftBuffer||'').length
-  const rightSize = (rightBuffer||'').length
+const toBuffer = ( source:string|Buffer ):Buffer => {
+  if ( source instanceof Buffer )
+    return source
+  return new Buffer(source)
+}
+
+const join = ( leftBuffer:string|Buffer, rightBuffer:string|Buffer ):Buffer => {
+  leftBuffer = toBuffer(leftBuffer||'')
+  rightBuffer = toBuffer(rightBuffer||'')
+  const leftSize = leftBuffer.length
+  const rightSize = rightBuffer.length
   const out = new Buffer(leftSize+rightSize)
   leftSize && leftBuffer.copy(out)
   rightSize && rightBuffer.copy(out,leftSize)
