@@ -18,17 +18,14 @@
     "allowSyntheticDefaultImports": true,
     "suppressExcessPropertyErrors": true,
     "suppressImplicitAnyIndexErrors": true,
-    "outDir": "release",
-    "lib": ["es6"],
+    "outDir": "dist",
+    "lib": ["es6","es2015"],
     "skipLibCheck": true
   },
   "include": [
     "src/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "src/**/*.spec.ts",
-    "src/sim.proc.ts",
-    "src/test-obs.ts"
+    "node_modules"
   ]
 }

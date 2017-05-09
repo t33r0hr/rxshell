@@ -65,13 +65,9 @@ const logStreamData = ( name:string, small=false ) => ( stream:Observable<Stream
 
 
 const spawnChild = ( options ) => {
-  /*const child = new ChildProcess({
-    command: 'ts-node ./src/utils/rx/child_process/sim.proc.ts --exitCode 0',
-    cwd: path.resolve(PROJECT_ROOT,'../../')
-  })
-
-  return child.spawn()*/
-  return spawn(options)
+  const child = new ChildProcess(options)
+  return child.spawn()
+  //return spawn(options)
 }
 
 describe('testing child process',()=>{

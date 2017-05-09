@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "release"
+  },
+  "exclude": [
+    "node_modules",
+    "./src/*.spec.ts"
+  ]
+}

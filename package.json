@@ -19,7 +19,7 @@
     "build": "npm run build:ts",
     "build:release": "NODE_ENV=production npm run build",
     "build:package": "NODE_ENV=package npm run build",
-    "build:ts": "tsc",
+    "build:ts": "tsc -p ./tsconfig.release.json",
     "package:minify": "uglifyjs release/index.js --source-map release/index.min.js.map --source-map-url release/index.js.map --compress --mangle --screw-ie8 --output release/index.min.js"
   },
   "repository": {
