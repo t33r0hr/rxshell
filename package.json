@@ -8,7 +8,6 @@
     "test": "NODE_ENV=test ts-mocha ./src/**/*.spec.ts",
     "test:childProcess": "NODE_ENV=test ts-mocha ./src/process/ChildProcess.spec.ts",
     "test:childProcess:watch": "./scripts/watch.sh test:childProcess",
-    "postinstall": "npm run build",
     "prestart": "npm run build",
     "start": "npm run dev",
     "dev": "./node_modules/.bin/nodemon -e ts --ignore dist/ --exec \"npm run dev\"",
