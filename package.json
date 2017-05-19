@@ -32,8 +32,7 @@
   "dependencies": {
     "@types/rx-node": "0.0.5",
     "rx-node": "^1.0.2",
-    "rxjs": "^5.3.0",
-    "rxlogger": "git+ssh://git@dergoldenefoehn.de:/opt/git/rxlogger.git"
+    "rxjs": "^5.3.0"
   },
   "devDependencies": {
     "@types/chai": "^3.5.1",
