@@ -6,7 +6,7 @@ import { CommandArgument } from '../arguments/interfaces'
 import { exec, createChildProcess, ChildProcess } from '../process'
 
 
-export const find = ( args:string[], pwd:string=process.cwd() ) => {
+export const find = ( args:string[], pwd:string=process.cwd() ):Observable<string> => {
   if ( !path.isAbsolute(pwd) )
   {
     pwd = path.relative(process.cwd(),path.resolve(pwd))
