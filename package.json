@@ -30,14 +30,12 @@
   "author": "Matthias Buchholz <mb@averagejoe.de>",
   "license": "MIT",
   "dependencies": {
-    "@types/rx-node": "0.0.5",
-    "rx-node": "^1.0.2",
+    "@types/node": "^7.0.14",
     "rxjs": "^5.3.0"
   },
   "devDependencies": {
     "@types/chai": "^3.5.1",
     "@types/mocha": "^2.2.41",
-    "@types/node": "^7.0.14",
     "ceylon": "^0.9.1",
     "mocha": "^3.3.0",
     "nodemon": "^1.11.0",
