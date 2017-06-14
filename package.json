@@ -5,7 +5,8 @@
   "main": "release/index.js",
   "typings": "release/index.d.ts",
   "scripts": {
-    "test": "NODE_ENV=test ts-mocha ./src/**/*.spec.ts",
+    "test": "NODE_ENV=debug ts-mocha ./src/**/*.spec.ts",
+    "test:watch": "./scripts/watch.sh test",
     "test:childProcess": "NODE_ENV=test ts-mocha ./src/process/ChildProcess.spec.ts",
     "test:childProcess:watch": "./scripts/watch.sh test:childProcess",
     "prestart": "npm run build",
@@ -21,6 +22,8 @@
     "build:release:watch": "./scripts/watch.sh build:release",
     "build:package": "NODE_ENV=package npm run build",
     "build:ts": "tsc -p ./tsconfig.release.json",
+    "sim:ok": "./test_process/ok.sh",
+    "sim:fail": "./test_process/fail.sh",
     "package:minify": "uglifyjs release/index.js --source-map release/index.min.js.map --source-map-url release/index.js.map --compress --mangle --screw-ie8 --output release/index.min.js"
   },
   "repository": {
@@ -31,6 +34,7 @@
   "license": "MIT",
   "dependencies": {
     "@types/rx-node": "0.0.5",
+    "rx": "^4.1.0",
     "rx-node": "^1.0.2",
     "rxjs": "^5.3.0"
   },
