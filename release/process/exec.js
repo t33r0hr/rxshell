@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const command_1 = require("../command");
-const ChildProcess_class_1 = require("./ChildProcess.class");
+const rx_1 = require("rx");
+const spawn_1 = require("./spawn");
 var StreamSocket;
 (function (StreamSocket) {
     StreamSocket[StreamSocket["stderr"] = 0] = "stderr";
@@ -10,12 +10,21 @@ var StreamSocket;
 })(StreamSocket = exports.StreamSocket || (exports.StreamSocket = {}));
 exports.createChildProcess = (commandOptions, opts) => {
     if ('string' === typeof commandOptions) {
-        return exports.createChildProcess(Object.assign({ command: command_1.parseCommand(commandOptions) }, opts));
+        return exports.createChildProcess(Object.assign({ command: commandOptions }, opts));
     }
-    return new ChildProcess_class_1.ChildProcess(commandOptions);
+    return spawn_1.spawn(commandOptions);
 };
-exports.exec = (commandOptions, opts) => {
+const mapError = (value) => {
+    if (value instanceof Buffer)
+        return mapError(value.toString('utf8'));
+    return new Error(value);
+};
+exports.exec = (commandOptions, linewise = false) => {
     const cp = exports.createChildProcess(commandOptions);
-    return cp.spawn();
+    if (linewise) {
+        const errorSource = cp.stderr.map(mapError);
+        return rx_1.Observable.merge(cp.stdout, errorSource.flatMap(error => rx_1.Observable.throw(error)));
+    }
+    return cp.stream;
 };
 //# sourceMappingURL=exec.js.map

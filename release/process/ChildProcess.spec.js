@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("mocha");
+const ceylon_1 = require("ceylon");
 const path = require("path");
-const ChildProcess_class_1 = require("./ChildProcess.class");
+const spawn_1 = require("./spawn");
+const exec_1 = require("./exec");
 const PROJECT_ROOT = path.resolve(__dirname, '../../');
 let colorCnt = 0;
 const colors = [32, 32, 33, 34, 35];
@@ -43,27 +45,39 @@ const logStreamData = (name, small = false) => (stream, callback) => {
     }))), callback);
 };
 const spawnChild = (options) => {
-    const child = new ChildProcess_class_1.ChildProcess(options);
-    return child.spawn();
+    const child = spawn_1.spawn(options);
+    return child;
     //return spawn(options)
 };
 describe('testing child process', () => {
     describe('exec find at ' + PROJECT_ROOT, function () {
         this.timeout(10 * 1000);
-        it('finds all files', (done) => {
-            spawnChild({
+        it('runs with no errors', (done) => {
+            let cnt = 0;
+            const child = exec_1.exec({
                 //command: 'ts-node ./src/sim.proc.ts --exitCode 0',
-                command: 'find ./node_modules -type file',
+                command: 'npm run sim:ok',
                 cwd: path.resolve(PROJECT_ROOT)
             })
-                .bufferCount(20).toArray().toPromise().then(data => {
-                console.log('result', data);
+                .subscribe(line => {
+                //console.log('line %s:\n----\n%s\n----\n', cnt++, line )
+                cnt++;
+            }, done, done);
+        });
+        it('runs with errors', (done) => {
+            let cnt = 0;
+            const child = exec_1.exec({
+                //command: 'ts-node ./src/sim.proc.ts --exitCode 0',
+                command: 'npm run sim:fail',
+                cwd: path.resolve(PROJECT_ROOT)
+            }, true)
+                .subscribe(line => {
+                //console.log('line %s:\n----\n%s\n----\n', cnt++, line )
+            }, error => {
+                ceylon_1.default(error).toExist();
                 done();
-            })
-                .catch(error => {
-                done(error);
-                console.log('failed with error');
-                console.error(error);
+            }, () => {
+                done('Should have caught an error.');
             });
         });
     });
