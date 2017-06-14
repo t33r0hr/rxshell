@@ -7,7 +7,6 @@
 /// <reference types="rx-lite-experimental" />
 /// <reference types="rx-lite-joinpatterns" />
 /// <reference types="rx-lite-time" />
-/// <reference types="node" />
 import { Observable } from 'rx';
 import { StreamData } from '../data';
 import { DataType, ChildProcessOptions } from './interfaces';
@@ -18,4 +17,4 @@ export declare enum StreamSocket {
     stdin = 2,
 }
 export declare const createChildProcess: <T extends DataType>(commandOptions: string | ChildProcessOptions<T>, opts?: any) => RxWrapper;
-export declare const exec: (commandOptions: string | ChildProcessOptions<DataType>, linewise?: boolean) => Observable<StreamData<string | Buffer | Error>>;
+export declare const exec: (commandOptions: string | ChildProcessOptions<DataType>, linewise?: boolean) => Observable<StreamData<DataType>>;

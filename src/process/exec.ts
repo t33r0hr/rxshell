@@ -32,7 +32,7 @@ const mapError = ( value:DataType ):Error => {
 }
 
 
-export const exec = ( commandOptions:ChildProcessOptions<DataType>|string, linewise:boolean=false ):ObservableStream<DataType|Error> => {
+export const exec = ( commandOptions:ChildProcessOptions<DataType>|string, linewise:boolean=false ):ObservableStream<DataType> => {
   const cp = createChildProcess(commandOptions)
 
   if ( linewise )
