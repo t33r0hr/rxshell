@@ -8,6 +8,6 @@ export interface ChildProcessError extends ChildProcessData<string> {
 export interface ChildProcessBuffer extends ChildProcessData<Buffer> {
 }
 export interface StreamData<T> {
-    stdout: T;
-    stderr: T;
+    stdout?: T;
+    stderr?: T;
 }

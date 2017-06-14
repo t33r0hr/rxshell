@@ -9,7 +9,8 @@ import {
   StreamData
 } from '../data'
 import { parseCommand  } from '../command'
-import { ChildProcess } from './ChildProcess.class'
+import { spawn } from './spawn'
+import { exec } from './exec'
 
 const PROJECT_ROOT = path.resolve(__dirname,'../../')
 
@@ -65,8 +66,8 @@ const logStreamData = ( name:string, small=false ) => ( stream:Observable<Stream
 
 
 const spawnChild = ( options ) => {
-  const child = new ChildProcess(options)
-  return child.spawn()
+  const child = spawn(options)
+  return child
   //return spawn(options)
 }
 
@@ -76,22 +77,40 @@ describe('testing child process',()=>{
 
     this.timeout(10 * 1000)
 
-    it('finds all files',(done)=>{
+    it('runs with no errors',(done)=>{
 
-      spawnChild({
+      let cnt = 0
+
+      const child = exec({
         //command: 'ts-node ./src/sim.proc.ts --exitCode 0',
-        command: 'find ./node_modules -type file',
+        command: 'npm run sim:ok',
         cwd: path.resolve(PROJECT_ROOT)
       })
-      .bufferCount(20).toArray().toPromise().then ( data => {
-          console.log('result',data)
-          done()        
-        })
-        .catch ( error => {
-          done(error)
-          console.log('failed with error')
-          console.error(error)
-        })
+      .subscribe ( line => {
+        //console.log('line %s:\n----\n%s\n----\n', cnt++, line )
+        cnt++
+      }, done, done)
+          
+
+    })
+    it('runs with errors',(done)=>{
+
+      
+      let cnt = 0
+
+      const child = exec({
+        //command: 'ts-node ./src/sim.proc.ts --exitCode 0',
+        command: 'npm run sim:fail',
+        cwd: path.resolve(PROJECT_ROOT)
+      }, true)
+      .subscribe ( line => {
+        //console.log('line %s:\n----\n%s\n----\n', cnt++, line )
+      }, error => {
+        expect(error).toExist()
+        done()
+      }, () => {
+        done('Should have caught an error.')
+      })
           
 
     })
