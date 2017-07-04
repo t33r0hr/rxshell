@@ -1,19 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const path = require("path");
-const process_1 = require("../process");
-exports.find = (args, pwd = process.cwd()) => {
+var path = require("path");
+var process_1 = require("../process");
+exports.find = function (args, pwd) {
+    if (pwd === void 0) { pwd = process.cwd(); }
     if (!path.isAbsolute(pwd)) {
         pwd = path.relative(process.cwd(), path.resolve(pwd));
     }
-    const stream = process_1.exec({
+    var stream = process_1.exec({
         command: {
             commandName: 'find',
-            args: ['.', ...args]
+            args: ['.'].concat(args)
         },
         cwd: pwd,
-        streamSeparator: new Buffer('\n')
-    }).map(data => data.stdout.toString('utf8'));
+        streamSeparator: '\n'
+    }).map(function (data) { return data.stdout; });
     return stream;
 };
 //# sourceMappingURL=find.js.map

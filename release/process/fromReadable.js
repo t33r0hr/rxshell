@@ -1,35 +1,39 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const rxjs_1 = require("rxjs");
-const sep = new Buffer("\n");
-const toBuffer = (source) => {
+var rxjs_1 = require("rxjs");
+var sep = new Buffer("\n");
+var toBuffer = function (source) {
     if (source instanceof Buffer)
         return source;
     return new Buffer(source);
 };
-const join = (leftBuffer, rightBuffer) => {
+var join = function (leftBuffer, rightBuffer) {
     leftBuffer = toBuffer(leftBuffer || '');
     rightBuffer = toBuffer(rightBuffer || '');
-    const leftSize = leftBuffer.length;
-    const rightSize = rightBuffer.length;
-    const out = new Buffer(leftSize + rightSize);
+    var leftSize = leftBuffer.length;
+    var rightSize = rightBuffer.length;
+    var out = new Buffer(leftSize + rightSize);
     leftSize && leftBuffer.copy(out);
     rightSize && rightBuffer.copy(out, leftSize);
     return out;
 };
-const total = (buffers) => {
-    let size = 0;
-    buffers.forEach(b => size += b.length);
+var total = function (buffers) {
+    var size = 0;
+    buffers.forEach(function (b) { return size += b.length; });
     return size;
 };
-const concatBuffers = (...sources) => {
+var concatBuffers = function () {
+    var sources = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        sources[_i] = arguments[_i];
+    }
     return sources.reduce(join);
 };
-const splitBuffer = (source, separator) => {
-    const chunks = [];
-    let offset = 0;
+var splitBuffer = function (source, separator) {
+    var chunks = [];
+    var offset = 0;
     do {
-        const pos = source.slice(offset).indexOf(separator) + offset;
+        var pos = source.slice(offset).indexOf(separator) + offset;
         if (pos > offset) {
             chunks.push(source.slice(offset, pos));
             offset = pos + 1;
@@ -45,27 +49,31 @@ exports.fromReadable = function (readable) {
     return rxjs_1.Observable.create(function (observer) {
         function nop() { }
         ;
-        let tmp = new Buffer('');
-        const emit = (...buffers) => {
+        var tmp = new Buffer('');
+        var emit = function () {
+            var buffers = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                buffers[_i] = arguments[_i];
+            }
             rxjs_1.Observable.from(buffers).subscribe(nextFn, throwFn);
         };
-        const onData = (data) => {
-            const chunks = splitBuffer(data, sep);
-            const first = concatBuffers(tmp, chunks.shift());
+        var onData = function (data) {
+            var chunks = splitBuffer(data, sep);
+            var first = concatBuffers(tmp, chunks.shift());
             tmp = chunks.pop();
-            emit(first, ...chunks);
+            emit.apply(void 0, [first].concat(chunks));
             //chunks.forEach( chunk => nextFn(chunk) )
         };
         var nextFn = observer.next ? observer.next.bind(observer) : nop;
         var returnFnCallback = observer.complete ? observer.complete.bind(observer) : nop;
-        const returnFn = () => {
+        var returnFn = function () {
             if (tmp && tmp.length > 0) {
                 nextFn(tmp);
             }
             returnFnCallback();
         };
         var throwFn = observer.error ? observer.error.bind(observer) : nop;
-        readable.on('data', (data) => {
+        readable.on('data', function (data) {
             onData(data);
         });
         readable.on('close', returnFn);

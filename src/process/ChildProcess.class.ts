@@ -31,13 +31,13 @@ export { ObservableStream, ProcessWrapper }
 
 export class ChildProcess {
 
-  constructor(options:ChildProcessOptions<Buffer>)
+  constructor(options:ChildProcessOptions<string>)
   {
     this.options = options
     this.stdin = (<any>process.stdin)
   }
 
-  options:ChildProcessOptions<Buffer>
+  options:ChildProcessOptions<string>
   pid:number
 
   private ref:ProcessWrapper
@@ -48,7 +48,7 @@ export class ChildProcess {
    * spawn child process and return pid
    * @return {Promise<number>} [description]
    */
-  spawn():ObservableStream<Buffer>{
+  spawn():ObservableStream<string>{
 
     const command = parseCommand(this.options.command)
     const cwd = this.options.cwd || process.cwd()

@@ -1,51 +1,59 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const rxjs_1 = require("rxjs");
-exports.writeToStream = (source, stream, encoding) => {
-    let isPaused = true;
-    const pauseToggle = new rxjs_1.Subject();
-    const resumeSource = () => {
+var rxjs_1 = require("rxjs");
+exports.writeToStream = function (source, stream, encoding) {
+    var isPaused = true;
+    var pauseToggle = new rxjs_1.Subject();
+    var resumeSource = function () {
         pauseToggle.next(true);
     };
-    const pauseSource = () => {
+    var pauseSource = function () {
         pauseToggle.next(false);
     };
-    const completeSource = () => {
+    var completeSource = function () {
         pauseToggle.complete();
     };
-    const pausableSource = pauseToggle.switchMap(val => {
+    var pausableSource = pauseToggle.asObservable().switchMap(function (val) {
         //logger.log('switch: ', val)
         return val ? rxjs_1.Observable.from(source, rxjs_1.Scheduler.async) : rxjs_1.Observable.never();
     });
-    const sourceFinished = rxjs_1.Observable.concat(source, rxjs_1.Observable.of(true), rxjs_1.Scheduler.async).takeLast(1).map(v => {
+    var sourceFinished = rxjs_1.Observable.concat(source, rxjs_1.Observable.of(true), rxjs_1.Scheduler.async).takeLast(1).map(function (v) {
         completeSource();
         return v;
     });
-    const pausableSourceFinished = rxjs_1.Observable.concat(pausableSource, rxjs_1.Observable.of(true), rxjs_1.Scheduler.async).takeLast(1).map(v => {
+    var pausableSourceFinished = rxjs_1.Observable.concat(pausableSource, rxjs_1.Observable.of(true), rxjs_1.Scheduler.async).takeLast(1).map(function (v) {
         stream.end();
         return v;
     });
     //logger.logObservable(pausableSource,'\x1b[1;34m[pausable source]\x1b[0m')
-    const onEnd = (...args) => {
+    var onEnd = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
         //logger.log('stream ended', args)
         completeSource();
     };
-    const onClose = (...args) => {
+    var onClose = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
         //logger.log('stream closed', args)
         completeSource();
     };
     stream.on('drain', resumeSource);
     stream.on('close', onClose);
     stream.on('end', onEnd);
-    const subscription = pausableSource.subscribe((data) => {
+    var subscription = pausableSource.subscribe(function (data) {
         //logger.log('write data: ', data.length)
-        const wrote = stream.write(data, () => {
+        var wrote = stream.write(data, function () {
             //console.log('did write data')
         });
         wrote || pauseSource();
-    }, (error) => {
+    }, function (error) {
         stream.emit('error', error);
-    }, () => {
+    }, function () {
         //stream.end()
         //logger.log('ended stream')
         stream.removeListener('drain', resumeSource);
