@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseCommand = (command) => {
+exports.parseCommand = function (command) {
     if ('string' !== typeof command) {
         return command;
     }
-    const [commandName, ...args] = command.split(' ') || [''];
+    var _a = command.split(' ') || [''], commandName = _a[0], args = _a.slice(1);
     return {
-        commandName,
-        args
+        commandName: commandName,
+        args: args
     };
 };
 //# sourceMappingURL=parse.js.map

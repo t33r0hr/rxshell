@@ -17,8 +17,8 @@ export const find = ( args:string[], pwd:string=process.cwd() ) => {
       args: ['.',...args]
     },
     cwd: pwd,
-    streamSeparator: new Buffer('\n')
-  }).map ( data => data.stdout.toString('utf8') )
+    streamSeparator: '\n'
+  }).map ( data => data.stdout )
 
   return stream
 }

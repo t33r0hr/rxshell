@@ -1,36 +1,40 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const options = {
+var options = {
     exitCode: 0,
     duration: 1000 * 3,
     errorAfter: 0
 };
 if (process && process.argv.length > 2) {
     for (var i = 2; i < process.argv.length; i++) {
-        const arg = process.argv[i];
+        var arg = process.argv[i];
         if (arg.startsWith('--')) {
-            const opt = arg.slice(2);
+            var opt = arg.slice(2);
             options[opt] = process.argv[++i];
         }
     }
 }
-const randomInt = (max = 100, min = 0) => {
+var randomInt = function (max, min) {
+    if (max === void 0) { max = 100; }
+    if (min === void 0) { min = 0; }
     return Math.floor(Math.random() * (max - min)) + min;
 };
-const chr_a = "a".charCodeAt(0);
-const chr_z = "z".charCodeAt(0);
-const randomChr = () => String.fromCharCode(randomInt(chr_z, chr_a));
-const randomWord = (length = randomInt(23, 2)) => {
-    const out = [];
+var chr_a = "a".charCodeAt(0);
+var chr_z = "z".charCodeAt(0);
+var randomChr = function () { return String.fromCharCode(randomInt(chr_z, chr_a)); };
+var randomWord = function (length) {
+    if (length === void 0) { length = randomInt(23, 2); }
+    var out = [];
     while (out.length < length) {
         out.push(randomChr());
     }
     return out.join('');
 };
-const text = (words = randomInt(1000, 300)) => {
-    let cnt = 0;
-    let currentRow = [];
-    const rows = [currentRow];
+var text = function (words) {
+    if (words === void 0) { words = randomInt(1000, 300); }
+    var cnt = 0;
+    var currentRow = [];
+    var rows = [currentRow];
     while (cnt++ < words) {
         currentRow.push(randomWord());
         if (cnt % 23 === 0) {
@@ -39,9 +43,9 @@ const text = (words = randomInt(1000, 300)) => {
         }
     }
     return rows
-        .map(row => row.join(' ')).join('\n');
+        .map(function (row) { return row.join(' '); }).join('\n');
 };
-const simEvents = [
+var simEvents = [
     { stdout: 'This is a normal line of text', delay: 300 },
     { stdout: 'This is a normal line of text', delay: 300 },
     { stdout: 'This is a normal line of text', delay: 300 },
@@ -71,11 +75,11 @@ const simEvents = [
     { stdout: 'This is a normal line of text' },
     { stdout: 'This is a normal line of text' }
 ];
-exports.sim = (simOpts) => {
-    const { stdout = process.stdout, stderr = process.stderr, stdin = process.stdin, exit = process.exit } = simOpts || {};
-    const MAX_GAP = 300;
-    const startTs = Date.now();
-    let idx = 0;
+exports.sim = function (simOpts) {
+    var _a = simOpts || {}, _b = _a.stdout, stdout = _b === void 0 ? process.stdout : _b, _c = _a.stderr, stderr = _c === void 0 ? process.stderr : _c, _d = _a.stdin, stdin = _d === void 0 ? process.stdin : _d, _e = _a.exit, exit = _e === void 0 ? process.exit : _e;
+    var MAX_GAP = 300;
+    var startTs = Date.now();
+    var idx = 0;
     /*
       let commandKey
     
@@ -93,36 +97,36 @@ exports.sim = (simOpts) => {
     
       })
     */
-    const send = (data) => {
-        stdout.write(`${idx}/${simEvents.length} - ${data}`);
+    var send = function (data) {
+        stdout.write(idx + "/" + simEvents.length + " - " + data);
     };
-    const sendError = (data) => {
+    var sendError = function (data) {
         stderr.write(data);
     };
-    const toError = (data) => {
+    var toError = function (data) {
         if (data instanceof Error) {
             return data;
         }
         return Error(data);
     };
-    const spawnError = (data) => {
+    var spawnError = function (data) {
         if (data.throws) {
             throw toError(data.stderr);
         }
         else {
-            const e = toError(data.stderr);
+            var e = toError(data.stderr);
             sendError('Error: ' + e.toString());
             sendError(e.stack);
         }
     };
-    let errorSent = false;
-    const next = () => {
-        const now = Date.now();
-        const d = now - startTs;
-        const t = Math.min(d, MAX_GAP);
-        const simEvent = simEvents[idx++];
-        const { delay = randomInt(t, Math.min(t, 100)) } = simEvent;
-        const tNext = delay;
+    var errorSent = false;
+    var next = function () {
+        var now = Date.now();
+        var d = now - startTs;
+        var t = Math.min(d, MAX_GAP);
+        var simEvent = simEvents[idx++];
+        var _a = simEvent.delay, delay = _a === void 0 ? randomInt(t, Math.min(t, 100)) : _a;
+        var tNext = delay;
         if (!simEvent) {
             console.log('error with no events left');
             return exit(options.exitCode);

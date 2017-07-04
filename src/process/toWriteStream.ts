@@ -1,4 +1,4 @@
-import { Observable, Observer, Subscription, Subject, Scheduler } from 'rxjs'
+import { Observable, Observer, Subscription, Scheduler, Subject } from 'rxjs'
 import { Writable, WritableOptions } from 'stream'
 
 export const writeToStream = ( source:Observable<Buffer>, stream:Writable, encoding:string ) => {
@@ -17,7 +17,7 @@ export const writeToStream = ( source:Observable<Buffer>, stream:Writable, encod
   }
 
 
-  const pausableSource = pauseToggle.switchMap(val => {
+  const pausableSource = pauseToggle.asObservable().switchMap(val => {
     //logger.log('switch: ', val)
     return val ? Observable.from(source,Scheduler.async) : Observable.never()
   } )

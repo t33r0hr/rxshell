@@ -11,7 +11,7 @@ export enum StreamSocket {
 }
 
 
-export const createChildProcess = ( commandOptions:ChildProcessOptions<Buffer>|string, opts?:any ):ChildProcess => {
+export const createChildProcess = ( commandOptions:ChildProcessOptions<string>|string, opts?:any ):ChildProcess => {
   if ( 'string' === typeof commandOptions )
   {
     return createChildProcess({
@@ -23,7 +23,7 @@ export const createChildProcess = ( commandOptions:ChildProcessOptions<Buffer>|s
 }
 
 
-export const exec = ( commandOptions:ChildProcessOptions<Buffer>|string, opts?:any ):ObservableStream<Buffer> => {
+export const exec = ( commandOptions:ChildProcessOptions<string>|string, opts?:any ):ObservableStream<string> => {
   const cp = createChildProcess(commandOptions)
   return cp.spawn()
 }
