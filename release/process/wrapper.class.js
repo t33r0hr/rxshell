@@ -61,8 +61,8 @@ var ProcessWrapper = (function () {
     ProcessWrapper.prototype.bindChildProcess = function () {
         this.__onFail = rxjs_1.Observable.fromEvent(this.childProcess, 'error', function (error) { return ({ error: error }); });
         this.__onClose = rxjs_1.Observable.fromEvent(this.childProcess, 'close', function (code, signal) { return ({ code: code, signal: signal }); });
-        this.__onStdoutData = fromReadable_1.fromReadable(this.childProcess.stdout).map(function (data) { return ({ data: data }); });
-        this.__onStderrData = fromReadable_1.fromReadable(this.childProcess.stderr).map(function (data) { return ({ data: data }); });
+        this.__onStdoutData = fromReadable_1.fromReadable(this.childProcess.stdout);
+        this.__onStderrData = fromReadable_1.fromReadable(this.childProcess.stderr);
         /*this.__onStdoutData = Observable.fromEvent(this.ref.stdout,'data',(data:Buffer)=>({data}))
         this.__onStderrData = Observable.fromEvent(this.ref.stderr,'data',(data:Buffer)=>({data}))*/
     };
