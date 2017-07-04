@@ -95,8 +95,8 @@ export class ProcessWrapper {
     this.__onFail = Observable.fromEvent(this.childProcess,'error',(error:Error)=>({error}))
     this.__onClose = Observable.fromEvent(this.childProcess,'close',(code:number,signal:string)=>({code,signal}))
 
-    this.__onStdoutData = fromReadable(this.childProcess.stdout).map(data=>({data}))
-    this.__onStderrData = fromReadable(this.childProcess.stderr).map(data=>({data}))
+    this.__onStdoutData = fromReadable(this.childProcess.stdout)
+    this.__onStderrData = fromReadable(this.childProcess.stderr)
 
 
 
