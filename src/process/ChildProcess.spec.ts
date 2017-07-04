@@ -84,7 +84,7 @@ describe('testing child process',()=>{
         cwd: path.resolve(PROJECT_ROOT)
       })
       .bufferCount(20).toArray().toPromise().then ( data => {
-          console.log('result',data)
+          //console.log('result',data)
           done()        
         })
         .catch ( error => {
