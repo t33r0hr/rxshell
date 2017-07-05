@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var rxjs_1 = require("rxjs");
+var debug = require("../debug");
 exports.writeToStream = function (source, stream, encoding) {
     var isPaused = true;
     var pauseToggle = new rxjs_1.Subject();
@@ -31,7 +32,7 @@ exports.writeToStream = function (source, stream, encoding) {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        //logger.log('stream ended', args)
+        debug.log('stream ended - args:', args);
         completeSource();
     };
     var onClose = function () {
@@ -39,14 +40,14 @@ exports.writeToStream = function (source, stream, encoding) {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        //logger.log('stream closed', args)
+        debug.log('stream closed - args:', args);
         completeSource();
     };
     stream.on('drain', resumeSource);
     stream.on('close', onClose);
     stream.on('end', onEnd);
     var subscription = pausableSource.subscribe(function (data) {
-        //logger.log('write data: ', data.length)
+        debug.log('writing stream data of length: %s', data.length);
         var wrote = stream.write(data, function () {
             //console.log('did write data')
         });
