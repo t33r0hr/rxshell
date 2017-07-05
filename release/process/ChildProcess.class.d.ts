@@ -1,3 +1,4 @@
+/// <reference types="node" />
 export * from './interfaces';
 import { ChildProcessOptions } from './interfaces';
 import { ObservableStream, ProcessWrapper } from './wrapper.class';
@@ -12,6 +13,6 @@ export declare class ChildProcess {
      * spawn child process and return pid
      * @return {Promise<number>} [description]
      */
-    spawn(): ObservableStream<string>;
+    spawn(): ObservableStream<Buffer | string>;
     private __lastError;
 }

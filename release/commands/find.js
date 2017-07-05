@@ -14,7 +14,12 @@ exports.find = function (args, pwd) {
         },
         cwd: pwd,
         streamSeparator: '\n'
-    }).map(function (data) { return data.stdout; });
+    })
+        .map(function (data) {
+        if ('string' === typeof data.stdout)
+            return data.stdout;
+        return data.stdout.toString('utf8');
+    });
     return stream;
 };
 //# sourceMappingURL=find.js.map

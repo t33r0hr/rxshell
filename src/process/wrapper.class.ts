@@ -33,12 +33,12 @@ export class ProcessWrapper {
 
   private __onFail:Observable<ChildProcessFailEvent>
   private __onClose:Observable<ChildProcessCloseEvent>
-  private __onStdoutData:Observable<string>
-  private __onStderrData:Observable<string>
+  private __onStdoutData:Observable<Buffer|string>
+  private __onStderrData:Observable<Buffer|string>
   
   private __onBecomeWritable
 
-  private __lastError:string
+  private __lastError:Buffer|string
 
   private __buffer_out:any[]
   
@@ -54,21 +54,21 @@ export class ProcessWrapper {
     return this.__onClose.map(e=>e.code)
   }
 
-  get stdout():Observable<string>{
+  get stdout():Observable<Buffer|string>{
     return Observable.from(this.__onStdoutData)
       .takeUntil(
           Observable.race(this.__onClose,this.__onFail)
         )
   }
   
-  get stderr():Observable<string>{
+  get stderr():Observable<Buffer|string>{
     return Observable.from(this.__onStderrData)
       .takeUntil(
           Observable.race(this.__onClose,this.__onFail)
         )
   }
 
-  get stream():ObservableStream<string> {
+  get stream():ObservableStream<Buffer|string> {
     return Observable.merge(
       this.__onStdoutData.map(event => {
         return {stdout: event} 

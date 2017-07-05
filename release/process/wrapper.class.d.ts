@@ -14,8 +14,8 @@ export declare class ProcessWrapper {
     private __buffer_out;
     write(value: Buffer | string): any;
     readonly end: Observable<number>;
-    readonly stdout: Observable<string>;
-    readonly stderr: Observable<string>;
-    readonly stream: ObservableStream<string>;
+    readonly stdout: Observable<Buffer | string>;
+    readonly stderr: Observable<Buffer | string>;
+    readonly stream: ObservableStream<Buffer | string>;
     protected bindChildProcess(): void;
 }
