@@ -30,7 +30,7 @@
   "author": "Matthias Buchholz <mb@averagejoe.de>",
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^7.0.18",
+    "@types/node": "^7.0.33",
     "rxjs": "^5.3.1"
   },
   "devDependencies": {
