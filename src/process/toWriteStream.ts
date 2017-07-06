@@ -2,7 +2,7 @@ import { Observable, Observer, Subscription, Scheduler, Subject } from 'rxjs'
 import { Writable, WritableOptions } from 'stream'
 import * as debug from '../debug'
 
-export const writeToStream = ( source:Observable<Buffer>, stream:Writable, encoding:string ) => {
+export const writeToStream = ( source:Observable<Buffer>, stream:Writable, encoding:string ):Observable<boolean> => {
 
   let isPaused = true
 
@@ -23,12 +23,12 @@ export const writeToStream = ( source:Observable<Buffer>, stream:Writable, encod
     return val ? Observable.from(source,Scheduler.async) : Observable.never()
   } )
 
-  const sourceFinished = Observable.concat(source,Observable.of(true),Scheduler.async).takeLast(1).map ( v => {
+  const sourceFinished = source.subscribeOn(Scheduler.async).takeLast(1).mapTo(true).map ( v => {
     completeSource()
     return v
   } )
 
-  const pausableSourceFinished = Observable.concat(pausableSource,Observable.of(true),Scheduler.async).takeLast(1).map ( v => {
+  const pausableSourceFinished = pausableSource.subscribeOn(Scheduler.async).takeLast(1).mapTo(true).map ( v => {
     stream.end()
     return v
   } )
