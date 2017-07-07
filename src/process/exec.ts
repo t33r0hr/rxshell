@@ -23,7 +23,7 @@ export const createChildProcess = ( commandOptions:ChildProcessOptions<string>|s
 }
 
 
-export const exec = ( commandOptions:ChildProcessOptions<string>|string, opts?:any ):ObservableStream<string> => {
+export const exec = ( commandOptions:ChildProcessOptions<string>|string, opts?:any ):ObservableStream<Buffer|string> => {
   const cp = createChildProcess(commandOptions)
   return cp.spawn()
 }

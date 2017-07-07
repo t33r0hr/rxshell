@@ -48,7 +48,7 @@ export class ChildProcess {
    * spawn child process and return pid
    * @return {Promise<number>} [description]
    */
-  spawn():ObservableStream<string>{
+  spawn():ObservableStream<Buffer|string>{
 
     const command = parseCommand(this.options.command)
     const cwd = this.options.cwd || process.cwd()

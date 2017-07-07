@@ -1,7 +1,8 @@
 import { Observable, Observer, Subscription, Scheduler, Subject } from 'rxjs'
 import { Writable, WritableOptions } from 'stream'
+import * as debug from '../debug'
 
-export const writeToStream = ( source:Observable<Buffer>, stream:Writable, encoding:string ) => {
+export const writeToStream = ( source:Observable<Buffer>, stream:Writable, encoding:string ):Observable<boolean> => {
 
   let isPaused = true
 
@@ -22,12 +23,12 @@ export const writeToStream = ( source:Observable<Buffer>, stream:Writable, encod
     return val ? Observable.from(source,Scheduler.async) : Observable.never()
   } )
 
-  const sourceFinished = Observable.concat(source,Observable.of(true),Scheduler.async).takeLast(1).map ( v => {
+  const sourceFinished = source.subscribeOn(Scheduler.async).takeLast(1).mapTo(true).map ( v => {
     completeSource()
     return v
   } )
 
-  const pausableSourceFinished = Observable.concat(pausableSource,Observable.of(true),Scheduler.async).takeLast(1).map ( v => {
+  const pausableSourceFinished = pausableSource.subscribeOn(Scheduler.async).takeLast(1).mapTo(true).map ( v => {
     stream.end()
     return v
   } )
@@ -35,12 +36,12 @@ export const writeToStream = ( source:Observable<Buffer>, stream:Writable, encod
   //logger.logObservable(pausableSource,'\x1b[1;34m[pausable source]\x1b[0m')
 
   const onEnd = ( ...args:any[] ) => {
-    //logger.log('stream ended', args)
+    debug.log('stream ended - args:', args)
     completeSource()
   }
 
   const onClose = ( ...args:any[] ) => {
-    //logger.log('stream closed', args)
+    debug.log('stream closed - args:', args)
     completeSource()
   }
 
@@ -50,7 +51,7 @@ export const writeToStream = ( source:Observable<Buffer>, stream:Writable, encod
 
   const subscription = pausableSource.subscribe(
     ( data ) => {
-      //logger.log('write data: ', data.length)
+      debug.log('writing stream data of length: %s', data.length)
       const wrote = stream.write(data,()=>{
         //console.log('did write data')
       })    
