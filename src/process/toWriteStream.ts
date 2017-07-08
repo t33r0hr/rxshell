@@ -1,6 +1,5 @@
 import { Observable, Observer, Subscription, Subject, Scheduler } from 'rxjs'
 import { Writable, WritableOptions } from 'stream'
-import * as logger from 'rxlogger'
 
 export const writeToStream = ( source:Observable<Buffer>, stream:Writable, encoding:string ) => {
 

@@ -8,7 +8,6 @@
     "test": "NODE_ENV=test ts-mocha ./src/**/*.spec.ts",
     "test:childProcess": "NODE_ENV=test ts-mocha ./src/process/ChildProcess.spec.ts",
     "test:childProcess:watch": "./scripts/watch.sh test:childProcess",
-    "postinstall": "npm run build",
     "prestart": "npm run build",
     "start": "npm run dev",
     "dev": "./node_modules/.bin/nodemon -e ts --ignore dist/ --exec \"npm run dev\"",
@@ -31,15 +30,12 @@
   "author": "Matthias Buchholz <mb@averagejoe.de>",
   "license": "MIT",
   "dependencies": {
-    "@types/rx-node": "0.0.5",
-    "rx-node": "^1.0.2",
-    "rxjs": "^5.3.0",
-    "rxlogger": "git+ssh://git@dergoldenefoehn.de:/opt/git/rxlogger.git"
+    "@types/node": "~6.0.60",
+    "rxjs": "^5.3.0"
   },
   "devDependencies": {
     "@types/chai": "^3.5.1",
     "@types/mocha": "^2.2.41",
-    "@types/node": "^7.0.14",
     "ceylon": "^0.9.1",
     "mocha": "^3.3.0",
     "nodemon": "^1.11.0",

@@ -13,7 +13,7 @@ exports.find = (args, pwd = process.cwd()) => {
         },
         cwd: pwd,
         streamSeparator: new Buffer('\n')
-    });
+    }).map(data => data.stdout.toString('utf8'));
     return stream;
 };
 //# sourceMappingURL=find.js.map
