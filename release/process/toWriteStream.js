@@ -13,7 +13,7 @@ exports.writeToStream = (source, stream, encoding) => {
     const completeSource = () => {
         pauseToggle.complete();
     };
-    const pausableSource = pauseToggle.switchMap(val => {
+    const pausableSource = pauseToggle.asObservable().switchMap(val => {
         //logger.log('switch: ', val)
         return val ? rxjs_1.Observable.from(source, rxjs_1.Scheduler.async) : rxjs_1.Observable.never();
     });
@@ -52,19 +52,7 @@ exports.writeToStream = (source, stream, encoding) => {
         stream.removeListener('close', onClose);
         stream.removeListener('end', onEnd);
     });
-    /*logger.logObservable(
-      Observable.concat(source.takeLast(1),Observable.of(true),Scheduler.async).skip(1).single().map ( v => {
-        completeSource()
-        return v
-      } ) ,
-      'source'
-    )*/
     resumeSource();
     return sourceFinished;
-    /*const onEnd = Observable.fromEvent(stream,'end',(event)=>true).map ( ends => {
-      console.log('write stream ended')
-      return ends
-    } )*/
-    //return onEnd.concat(Scheduler.async)
 };
 //# sourceMappingURL=toWriteStream.js.map

@@ -16,6 +16,6 @@ export declare class ProcessWrapper {
     readonly end: Observable<number>;
     readonly stdout: Observable<Buffer>;
     readonly stderr: Observable<Buffer>;
-    readonly stream: ObservableStream<Buffer>;
+    readonly stream: Observable<StreamData<Buffer>>;
     protected bindChildProcess(): void;
 }

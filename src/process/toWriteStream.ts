@@ -17,7 +17,7 @@ export const writeToStream = ( source:Observable<Buffer>, stream:Writable, encod
   }
 
 
-  const pausableSource = pauseToggle.switchMap(val => {
+  const pausableSource = pauseToggle.asObservable().switchMap(val => {
     //logger.log('switch: ', val)
     return val ? Observable.from(source,Scheduler.async) : Observable.never()
   } )
@@ -68,21 +68,7 @@ export const writeToStream = ( source:Observable<Buffer>, stream:Writable, encod
     }
   )
 
-  /*logger.logObservable(
-    Observable.concat(source.takeLast(1),Observable.of(true),Scheduler.async).skip(1).single().map ( v => {
-      completeSource()
-      return v
-    } ) ,
-    'source'
-  )*/
 
   resumeSource()
   return sourceFinished
-
-  /*const onEnd = Observable.fromEvent(stream,'end',(event)=>true).map ( ends => {
-    console.log('write stream ended')
-    return ends
-  } )*/
-
-  //return onEnd.concat(Scheduler.async)
 }

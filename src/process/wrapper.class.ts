@@ -5,7 +5,7 @@ import { writeToStream } from './toWriteStream'
 
 import {
   ChildProcessData, ChildProcessBuffer, ChildProcessError,
-  StreamData
+  StreamData, StdoutData, StderrData
 } from '../data'
 
 
@@ -13,7 +13,8 @@ import {
   ChildProcessEventName,
   ChildProcessEvent, 
   ChildProcessFailEvent, ChildProcessCloseEvent,
-  ChildProcessDataEvent, ChildProcessStderrDataEvent, ChildProcessStdoutDataEvent
+  ChildProcessDataEvent, ChildProcessStderrDataEvent, ChildProcessStdoutDataEvent,
+  createChildProcessCloseEvent, createChildProcessDataEvent, createChildProcessFailEvent
 } from '../events'
 
 export type ObservableStream<T> = Observable<StreamData<T>>
@@ -33,8 +34,8 @@ export class ProcessWrapper {
 
   private __onFail:Observable<ChildProcessFailEvent>
   private __onClose:Observable<ChildProcessCloseEvent>
-  private __onStdoutData:Observable<ChildProcessStdoutDataEvent>
-  private __onStderrData:Observable<ChildProcessStderrDataEvent>
+  private __onStdoutData:Observable<ChildProcessData<Buffer>>
+  private __onStderrData:Observable<ChildProcessData<Buffer>>
   
   private __onBecomeWritable
 
@@ -68,15 +69,18 @@ export class ProcessWrapper {
         )
   }
 
-  get stream():ObservableStream<Buffer> {
+  get stream():Observable<StreamData<Buffer>> {
     return Observable.merge(
-      this.__onStdoutData.map(event => {
-        return {stdout: event.data} 
-      }),
-      this.__onStderrData.map(event => {
-        this.__lastError = event.data.toString('utf8')
-        return {stderr: event.data} 
-      })
+      this.stdout.map(  (data:Buffer):StdoutData<Buffer> => {
+        return {
+          stdout: data
+        }
+      } ),
+      this.stderr.map(  (data:Buffer):StderrData<Buffer> => {
+        return {
+          stderr: data
+        }
+      } )
     )
     .takeUntil(
       Observable.merge(
@@ -92,11 +96,11 @@ export class ProcessWrapper {
 
   protected bindChildProcess(){
 
-    this.__onFail = Observable.fromEvent(this.childProcess,'error',(error:Error)=>({error}))
-    this.__onClose = Observable.fromEvent(this.childProcess,'close',(code:number,signal:string)=>({code,signal}))
+    this.__onFail = Observable.fromEvent(this.childProcess,'error',createChildProcessFailEvent)
+    this.__onClose = Observable.fromEvent(this.childProcess,'close',createChildProcessCloseEvent)
 
-    this.__onStdoutData = fromReadable(this.childProcess.stdout).map(data=>({data}))
-    this.__onStderrData = fromReadable(this.childProcess.stderr).map(data=>({data}))
+    this.__onStdoutData = fromReadable(this.childProcess.stdout).map(data=>createChildProcessDataEvent('stdout',data))
+    this.__onStderrData = fromReadable(this.childProcess.stderr).map(data=>createChildProcessDataEvent('stderr',data))
 
 
 

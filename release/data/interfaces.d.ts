@@ -7,7 +7,10 @@ export interface ChildProcessError extends ChildProcessData<string> {
 }
 export interface ChildProcessBuffer extends ChildProcessData<Buffer> {
 }
-export interface StreamData<T> {
+export interface StdoutData<T> {
     stdout: T;
+}
+export interface StderrData<T> {
     stderr: T;
 }
+export declare type StreamData<T> = StdoutData<T> | StderrData<T>;

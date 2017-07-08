@@ -6,7 +6,7 @@ import {
   ChildProcessOptions, ExecCallback  
 } from './interfaces'
 import { 
-  StreamData
+  StreamData, typechecks
 } from '../data'
 import { parseCommand  } from '../command'
 import { ChildProcess } from './ChildProcess.class'
@@ -55,14 +55,6 @@ const logStream = ( name:string, small=false ) => ( stream:Observable<Buffer> , 
       }
     )
 }
-
-const logStreamData = ( name:string, small=false ) => ( stream:Observable<StreamData<Buffer>> , callback?:any ) => {
-  return logStream ( name, small ) ( stream.map ( item => new Buffer(JSON.stringify({
-    stdout: item.stdout ? item.stdout.toString() : false,
-    stderr: item.stderr ? item.stderr.toString() : false
-  })) ), callback)
-}
-
 
 const spawnChild = ( options ) => {
   const child = new ChildProcess(options)

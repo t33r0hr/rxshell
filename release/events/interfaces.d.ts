@@ -1,20 +1,22 @@
 /// <reference types="node" />
 /** events */
 export declare type ChildProcessEventName = 'fail' | 'close' | 'stdout' | 'stderr';
-export interface ChildProcessEvent<ChildProcessEventName> {
+export interface ChildProcessEvent {
     name: ChildProcessEventName;
 }
-export interface ChildProcessFailEvent extends ChildProcessEvent<'fail'> {
+export interface ChildProcessFailEvent extends ChildProcessEvent {
     error: Error;
 }
-export interface ChildProcessCloseEvent extends ChildProcessEvent<'close'> {
+export interface ChildProcessCloseEvent extends ChildProcessEvent {
     code: number;
     signal: string;
 }
-export interface ChildProcessDataEvent<ChildProcessEventName> extends ChildProcessEvent<ChildProcessEventName> {
+export interface ChildProcessDataEvent extends ChildProcessEvent {
     data: Buffer;
 }
-export interface ChildProcessStderrDataEvent extends ChildProcessDataEvent<'stderr'> {
+export interface ChildProcessStderrDataEvent extends ChildProcessDataEvent {
+    name: 'stderr';
 }
-export interface ChildProcessStdoutDataEvent extends ChildProcessDataEvent<'stdout'> {
+export interface ChildProcessStdoutDataEvent extends ChildProcessDataEvent {
+    name: 'stdout';
 }

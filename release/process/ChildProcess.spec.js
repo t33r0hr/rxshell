@@ -36,12 +36,6 @@ const logStream = (name, small = false) => (stream, callback) => {
         callback && callback();
     });
 };
-const logStreamData = (name, small = false) => (stream, callback) => {
-    return logStream(name, small)(stream.map(item => new Buffer(JSON.stringify({
-        stdout: item.stdout ? item.stdout.toString() : false,
-        stderr: item.stderr ? item.stderr.toString() : false
-    }))), callback);
-};
 const spawnChild = (options) => {
     const child = new ChildProcess_class_1.ChildProcess(options);
     return child.spawn();

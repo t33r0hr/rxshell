@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs'
 import * as path from 'path'
 import { CommandParams, parseCommand } from '../command'
-import { StreamData } from '../data'
+import { StreamData, typechecks } from '../data'
 import { CommandArgument } from '../arguments/interfaces'
 import { exec, createChildProcess, ChildProcess } from '../process'
 
@@ -18,7 +18,12 @@ export const find = ( args:string[], pwd:string=process.cwd() ):Observable<strin
     },
     cwd: pwd,
     streamSeparator: new Buffer('\n')
-  }).map ( data => data.stdout.toString('utf8') )
+  })
+  .map ( data => {
+    if ( typechecks.isStdoutData(data) )
+      return data.stdout.toString('utf8')
+    return ''
+  } )
 
   return stream
 }
