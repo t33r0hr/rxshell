@@ -13,6 +13,10 @@ class ChildProcess {
      * @return {Promise<number>} [description]
      */
     spawn() {
+        const wrapper = this.wrap();
+        return wrapper.stream;
+    }
+    wrap() {
         const command = command_1.parseCommand(this.options.command);
         const cwd = this.options.cwd || process.cwd();
         if (/debug/.test(process.env.NODE_ENV || '')) {
@@ -23,7 +27,7 @@ class ChildProcess {
         })*/
         this.ref = new wrapper_class_1.ProcessWrapper(command.commandName, command.args, cwd);
         //Observable.interval(300,Scheduler.async).subscribe( val => this.ref.write(`${val}`) )
-        return this.ref.stream;
+        return this.ref;
     }
 }
 exports.ChildProcess = ChildProcess;

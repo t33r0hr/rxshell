@@ -14,5 +14,6 @@ export declare class ChildProcess {
      * @return {Promise<number>} [description]
      */
     spawn(): ObservableStream<Buffer>;
+    wrap(): ProcessWrapper;
     private __lastError;
 }

@@ -49,7 +49,11 @@ export class ChildProcess {
    * @return {Promise<number>} [description]
    */
   spawn():ObservableStream<Buffer>{
+    const wrapper = this.wrap()
+    return wrapper.stream
+  }  
 
+  wrap():ProcessWrapper{
     const command = parseCommand(this.options.command)
     const cwd = this.options.cwd || process.cwd()
     if ( /debug/.test(process.env.NODE_ENV||'') )
@@ -62,7 +66,7 @@ export class ChildProcess {
     })*/
     this.ref = new ProcessWrapper(command.commandName,command.args,cwd)
     //Observable.interval(300,Scheduler.async).subscribe( val => this.ref.write(`${val}`) )
-    return this.ref.stream
+    return this.ref
   }
 
   private __lastError:string
