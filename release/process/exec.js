@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const rxjs_1 = require("rxjs");
+const data_1 = require("../data");
 const command_1 = require("../command");
 const ChildProcess_class_1 = require("./ChildProcess.class");
 var StreamSocket;
@@ -16,6 +18,13 @@ exports.createChildProcess = (commandOptions, opts) => {
 };
 exports.exec = (commandOptions, opts) => {
     const cp = exports.createChildProcess(commandOptions);
-    return cp.spawn();
+    return cp.spawn().concatMap(data => {
+        if (data_1.typechecks.isStdoutData(data)) {
+            return rxjs_1.Observable.of(data.stdout.toString('utf8'));
+        }
+        else {
+            return rxjs_1.Observable.throw(new Error(`Error: ${data.stderr}`));
+        }
+    });
 };
 //# sourceMappingURL=exec.js.map

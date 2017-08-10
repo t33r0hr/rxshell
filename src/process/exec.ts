@@ -1,5 +1,5 @@
 import { Observable, Scheduler } from 'rxjs'
-import { StreamData } from '../data'
+import { StreamData, typechecks } from '../data'
 import { parseCommand  } from '../command'
 import { ChildProcess, ChildProcessOptions, ObservableStream, ExecCallback } from './ChildProcess.class'
 
@@ -23,7 +23,13 @@ export const createChildProcess = ( commandOptions:ChildProcessOptions<Buffer>|s
 }
 
 
-export const exec = ( commandOptions:ChildProcessOptions<Buffer>|string, opts?:any ):ObservableStream<Buffer> => {
+export const exec = ( commandOptions:ChildProcessOptions<Buffer>|string, opts?:any ):Observable<string> => {
   const cp = createChildProcess(commandOptions)
-  return cp.spawn()
+  return cp.spawn().concatMap ( data => {
+    if ( typechecks.isStdoutData(data) ) {
+      return Observable.of(data.stdout.toString('utf8'))
+    } else {
+      return Observable.throw ( new Error(`Error: ${data.stderr}`) )
+    }
+  } )
 }

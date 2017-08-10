@@ -19,11 +19,6 @@ export const find = ( args:string[], pwd:string=process.cwd() ):Observable<strin
     cwd: pwd,
     streamSeparator: new Buffer('\n')
   })
-  .map ( data => {
-    if ( typechecks.isStdoutData(data) )
-      return data.stdout.toString('utf8')
-    return ''
-  } )
 
   return stream
 }

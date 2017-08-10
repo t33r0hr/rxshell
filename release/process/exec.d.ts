@@ -1,6 +1,5 @@
 /// <reference types="node" />
 import { Observable } from 'rxjs';
-import { StreamData } from '../data';
 import { ChildProcess, ChildProcessOptions } from './ChildProcess.class';
 export declare enum StreamSocket {
     stderr = 0,
@@ -8,4 +7,4 @@ export declare enum StreamSocket {
     stdin = 2,
 }
 export declare const createChildProcess: (commandOptions: string | ChildProcessOptions<Buffer>, opts?: any) => ChildProcess;
-export declare const exec: (commandOptions: string | ChildProcessOptions<Buffer>, opts?: any) => Observable<StreamData<Buffer>>;
+export declare const exec: (commandOptions: string | ChildProcessOptions<Buffer>, opts?: any) => Observable<string>;
